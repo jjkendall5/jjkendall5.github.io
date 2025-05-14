@@ -4,21 +4,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JKPS v1</title>
+    <style>
+      /* Make the canvas responsive */
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0; /* Optional background color */
+      }
+
+      canvas {
+        width: 100%;
+        height: 100%;
+        max-width: 700px; /* Optional to limit max width */
+        max-height: 500px; /* Optional to limit max height */
+        display: block;
+      }
+    </style>
   </head>
   <body>
-    <canvas id="canvas" width="700" height="500"></canvas>
+    <canvas id="canvas"></canvas>
 
     <script src="https://unpkg.com/@rive-app/canvas"></script>
     <script>
-      const r = new rive.Rive({
+      const canvas = document.getElementById("canvas");
+
+      // Adjust canvas size dynamically based on the device size
+      const resizeCanvas = () => {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
+
+        if (riveInstance) {
+          riveInstance.resizeDrawingSurfaceToCanvas();
+        }
+      };
+
+      const riveInstance = new rive.Rive({
         src: "thpsv4_090525.riv",
-        canvas: document.getElementById("canvas"),
+        canvas: canvas,
         autoplay: true,
-        // artboard: "Arboard", // Optional. If not supplied the default is selected
         stateMachines: "State Machine 1",
         onLoad: () => {
-          // Ensure the drawing surface matches the canvas size and device pixel ratio
-          r.resizeDrawingSurfaceToCanvas();
+          resizeCanvas();
+          window.addEventListener("resize", resizeCanvas);
         },
       });
     </script>
