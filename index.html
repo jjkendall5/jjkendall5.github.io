@@ -1,44 +1,85 @@
-<script src="https://unpkg.com/@rive-app/webgl2"></script>
-<script>
-  const canvas = document.getElementById("canvas");
-  const canvasWrapper = document.getElementById("canvas-wrapper");
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JKPS v1</title>
+    <style>
+      /* Reset body margin and padding */
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000; /* Optional background color for contrast */
+        overflow: hidden; /* Prevent scrolling */
+      }
 
-  // Function to adjust the canvas-wrapper height to account for browser UI elements
-  const adjustCanvasWrapperHeight = () => {
-    canvasWrapper.style.height = `${window.innerHeight}px`;
-  };
+      /* Wrapper for the canvas */
+      .canvas-wrapper {
+        width: 100vw;
+        height: 100vh; /* Default to 100vh, adjusted dynamically via JS */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-  // Initialize Rive animation
-  const riveInstance = new rive.Rive({
-    src: "thpsv4_090525.riv", // Path to your Rive file
-    canvas: canvas,
-    autoplay: true,
-    stateMachines: "State Machine 1", // State machine in your Rive file
-    renderer: "webgl2", // Explicitly use the WebGL2 renderer
-    onLoad: () => {
+      /* Make the canvas responsive */
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="canvas-wrapper" id="canvas-wrapper">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <script src="https://unpkg.com/@rive-app/canvas"></script>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const canvasWrapper = document.getElementById("canvas-wrapper");
+
+      // Function to adjust the canvas-wrapper height to account for browser UI elements
+      const adjustCanvasWrapperHeight = () => {
+        canvasWrapper.style.height = `${window.innerHeight}px`;
+      };
+
+      // Initialize Rive animation
+      const riveInstance = new rive.Rive({
+        src: "thpsv4_090525.riv",
+        canvas: canvas,
+        autoplay: true,
+        stateMachines: "State Machine 1",
+        onLoad: () => {
+          resizeCanvas();
+          window.addEventListener("resize", resizeCanvas);
+        },
+      });
+
+      // Ensure the canvas resizes dynamically
+      const resizeCanvas = () => {
+        // Adjust the canvas-wrapper height dynamically
+        adjustCanvasWrapperHeight();
+
+        // Adjust canvas size to match its CSS dimensions
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
+
+        // Resize the drawing surface to match the new canvas dimensions
+        riveInstance.resizeDrawingSurfaceToCanvas();
+      };
+
+      // Initial adjustments
+      adjustCanvasWrapperHeight();
       resizeCanvas();
+
+      // Add resize event listener
       window.addEventListener("resize", resizeCanvas);
-    },
-  });
-
-  // Ensure the canvas resizes dynamically
-  const resizeCanvas = () => {
-    // Adjust the canvas-wrapper height dynamically
-    adjustCanvasWrapperHeight();
-
-    // Adjust canvas size to match its CSS dimensions
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
-
-    // Resize the drawing surface to match the new canvas dimensions
-    riveInstance.resizeDrawingSurfaceToCanvas();
-  };
-
-  // Initial adjustments
-  adjustCanvasWrapperHeight();
-  resizeCanvas();
-
-  // Add resize event listener
-  window.addEventListener("resize", resizeCanvas);
-</script>
+    </script>
+  </body>
+</html>
