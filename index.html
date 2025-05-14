@@ -17,11 +17,20 @@
         overflow: hidden; /* Prevent scrolling */
       }
 
-      /* Make the canvas full screen */
+      /* Make the canvas responsive */
       canvas {
         display: block;
-        width: 100vw;
-        height: 100vh;
+        width: 90vw; /* Default width: 90% of the viewport width */
+        height: auto; /* Maintain aspect ratio */
+        max-width: 1200px; /* Optional maximum width for larger screens */
+        max-height: 80vh; /* Optional maximum height */
+      }
+
+      /* Media query for larger screens */
+      @media (min-width: 1200px) {
+        canvas {
+          width: 70vw; /* Reduce size slightly for very large screens */
+        }
       }
     </style>
   </head>
@@ -39,24 +48,23 @@
         autoplay: true,
         stateMachines: "State Machine 1",
         onLoad: () => {
-          // Resize the drawing surface to match the canvas dimensions
-          riveInstance.resizeDrawingSurfaceToCanvas();
+          resizeCanvas();
+          window.addEventListener("resize", resizeCanvas);
         },
       });
 
-      // Ensure the canvas resizes to fit the screen
+      // Ensure the canvas resizes dynamically
       const resizeCanvas = () => {
-        canvas.width = window.innerWidth * window.devicePixelRatio;
-        canvas.height = window.innerHeight * window.devicePixelRatio;
+        // Adjust canvas size to match its CSS dimensions
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
 
-        // Resize the drawing surface again after canvas size change
+        // Resize the drawing surface to match the new canvas dimensions
         riveInstance.resizeDrawingSurfaceToCanvas();
       };
 
-      // Add resize event listener
-      window.addEventListener("resize", resizeCanvas);
-
-      // Initial resize
+      // Initial resize to ensure proper sizing
       resizeCanvas();
     </script>
   </body>
