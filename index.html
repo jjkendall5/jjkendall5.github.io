@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JKPS v1</title>
     <style>
-      /* Make the canvas responsive */
+      /* Reset body margin and padding */
       body {
         margin: 0;
         padding: 0;
@@ -13,15 +13,15 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #f0f0f0; /* Optional background color */
+        background-color: #000; /* Optional background color for contrast */
+        overflow: hidden; /* Prevent scrolling */
       }
 
+      /* Make the canvas full screen */
       canvas {
-        width: 100%;
-        height: 100%;
-        max-width: 700px; /* Optional to limit max width */
-        max-height: 500px; /* Optional to limit max height */
         display: block;
+        width: 100vw;
+        height: 100vh;
       }
     </style>
   </head>
@@ -32,27 +32,32 @@
     <script>
       const canvas = document.getElementById("canvas");
 
-      // Adjust canvas size dynamically based on the device size
-      const resizeCanvas = () => {
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * window.devicePixelRatio;
-        canvas.height = rect.height * window.devicePixelRatio;
-
-        if (riveInstance) {
-          riveInstance.resizeDrawingSurfaceToCanvas();
-        }
-      };
-
+      // Initialize Rive animation
       const riveInstance = new rive.Rive({
         src: "thpsv4_090525.riv",
         canvas: canvas,
         autoplay: true,
         stateMachines: "State Machine 1",
         onLoad: () => {
-          resizeCanvas();
-          window.addEventListener("resize", resizeCanvas);
+          // Resize the drawing surface to match the canvas dimensions
+          riveInstance.resizeDrawingSurfaceToCanvas();
         },
       });
+
+      // Ensure the canvas resizes to fit the screen
+      const resizeCanvas = () => {
+        canvas.width = window.innerWidth * window.devicePixelRatio;
+        canvas.height = window.innerHeight * window.devicePixelRatio;
+
+        // Resize the drawing surface again after canvas size change
+        riveInstance.resizeDrawingSurfaceToCanvas();
+      };
+
+      // Add resize event listener
+      window.addEventListener("resize", resizeCanvas);
+
+      // Initial resize
+      resizeCanvas();
     </script>
   </body>
 </html>
