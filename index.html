@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Rive (JS) Quick Start</title>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JKPS v1</title>
   </head>
-
   <body>
-    <!-- https://rive.app/community/2732-5606-clean-the-car/ -->
-    <canvas
-      style="
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        background-color: black;
-      "
-      id="rive-canvas"
-    ></canvas>
-    <script src="./index.mjs" type="module"></script>
+    <canvas id="canvas" width="1080" height="720"></canvas>
+
+    <script src="https://unpkg.com/@rive-app/canvas"></script>
+    <script>
+      const r = new rive.Rive({
+        src: "https://cdn.rive.app/animations/vehicles.riv",
+        canvas: document.getElementById("canvas"),
+        autoplay: true,
+        // artboard: "Arboard", // Optional. If not supplied the default is selected
+        stateMachines: "State Machine 1",
+        onLoad: () => {
+          // Ensure the drawing surface matches the canvas size and device pixel ratio
+          r.resizeDrawingSurfaceToCanvas();
+        },
+      });
+    </script>
   </body>
 </html>
