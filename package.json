@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "parcel https://github.com/jjkendall5/jjkendall5.github.io/blob/main/index.html",
-    "build": "parcel build https://github.com/jjkendall5/jjkendall5.github.io/blob/main/index.html"
+    "start": "parcel ./src/index.html",
+    "build": "parcel build ./src/index.html"
   },
   "devDependencies": {
     "parcel": "^2.0.0"
